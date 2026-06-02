@@ -6,7 +6,7 @@ import { AdminContext } from './context/AdminContext'
 import { DoctorContext } from './context/DoctorContext'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import Dashboard from './pages/Admin/Dashboard'
 import AllAppointments from './pages/Admin/AllApointments'
 import AddDoctor from './pages/Admin/AddDoctor'
@@ -22,13 +22,13 @@ const App = () => {
   const { dToken } = useContext(DoctorContext)
 
   return aToken ? (
-    <div className='bg-[#F8F9FD]'>
+    <div className='bg-[#F8F9FD] min-h-screen'>
       <ToastContainer />
       <Navbar />
       <div className='flex items-start'>
         <Sidebar />
         <Routes>
-          <Route path='/' element={<></>} />
+          <Route path='/' element={<Navigate to='/admin-dashboard' />} />
           <Route path='/admin-dashboard' element={<Dashboard />} />
           <Route path='/all-appointments' element={<AllAppointments />} />
           <Route path='/add-doctor' element={<AddDoctor />} />
@@ -39,13 +39,13 @@ const App = () => {
       </div>
     </div>
   ) : dToken ? (
-    <div className='bg-[#F8F9FD]'>
+    <div className='bg-[#F8F9FD] min-h-screen'>
       <ToastContainer />
       <Navbar />
       <div className='flex items-start'>
         <Sidebar />
         <Routes>
-          <Route path='/' element={<></>} />
+          <Route path='/' element={<Navigate to='/doctor-dashboard' />} />
           <Route path='/doctor-dashboard' element={<DoctorDashboard />} />
           <Route path='/doctor-appointments' element={<DoctorAppointments />} />
           <Route path='/doctor-profile' element={<DoctorProfile />} />

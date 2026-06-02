@@ -11,9 +11,7 @@ const PatientsList = () => {
       const { data } = await axios.get(backendUrl + "/api/admin/all-patients", {
         headers: { atoken: aToken },
       });
-      if (data.success) {
-        setPatients(data.users.reverse());
-      }
+      if (data.success) setPatients(data.users.reverse());
     } catch (error) {
       console.log(error);
     }
@@ -24,54 +22,45 @@ const PatientsList = () => {
   }, [aToken]);
 
   return (
-    <div className="m-4 sm:m-5 max-h-[90vh] overflow-y-scroll">
+    <div className="m-3 sm:m-5 flex-1 overflow-y-auto max-h-[90vh]">
       <h1 className="text-lg font-medium mb-4">
         All Patients
-        <span className="ml-2 text-sm text-gray-500">
-          (Total: {patients.length})
-        </span>
+        <span className="ml-2 text-sm text-gray-500">(Total: {patients.length})</span>
       </h1>
 
-      <div className="bg-white border rounded text-sm">
-        <div className="hidden sm:grid grid-cols-[0.5fr_1.5fr_3fr_2fr_1.5fr_1.5fr] py-3 px-6 border-b bg-gray-50 text-gray-500 font-medium">
-          <p>#</p>
-          <p>Photo</p>
-          <p>Name & Email</p>
-          <p>Phone</p>
-          <p>Gender</p>
-          <p>DOB</p>
+      {patients.length === 0 ? (
+        <div className="flex items-center justify-center min-h-[40vh] text-gray-500">
+          <p>No patients registered yet</p>
         </div>
-
-        {patients.length === 0 ? (
-          <div className="p-10 text-center text-gray-500">
-            No patients registered yet
-          </div>
-        ) : (
-          patients.map((item, index) => (
-            <div
-              className="flex flex-col sm:grid sm:grid-cols-[0.5fr_1.5fr_3fr_2fr_1.5fr_1.5fr] items-start sm:items-center py-3 px-4 sm:px-6 border-b hover:bg-gray-50 gap-2 sm:gap-0"
-              key={index}
-            >
-              <p className="hidden sm:block text-gray-500">{index + 1}</p>
-
-              <img
-                className="w-10 h-10 rounded-full object-cover bg-gray-100"
-                src={item.image}
-                alt={item.name}
-              />
-
-              <div>
-                <p className="text-gray-800 font-medium">{item.name}</p>
-                <p className="text-gray-500 text-xs">{item.email}</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {patients.map((item, index) => (
+            <div key={index} className="bg-white border rounded-xl p-4 hover:shadow-md transition-all">
+              <div className="flex items-center gap-3 mb-3">
+                <img className="w-14 h-14 rounded-full object-cover bg-gray-100 border" src={item.image} alt={item.name} />
+                <div>
+                  <p className="text-gray-800 font-semibold text-base">{item.name}</p>
+                  <p className="text-gray-500 text-xs break-all">{item.email}</p>
+                </div>
               </div>
-
-              <p className="text-gray-600">{item.phone || 'N/A'}</p>
-              <p className="text-gray-600">{item.gender || 'N/A'}</p>
-              <p className="text-gray-600">{item.dob || 'N/A'}</p>
+              <div className="space-y-1 text-sm">
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-400 w-16 shrink-0">📞 Phone:</span>
+                  <span className="text-gray-700 font-medium">{item.phone || 'N/A'}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-400 w-16 shrink-0">⚥ Gender:</span>
+                  <span className="text-gray-700 font-medium">{item.gender || 'N/A'}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-400 w-16 shrink-0">🎂 DOB:</span>
+                  <span className="text-gray-700 font-medium">{item.dob || 'N/A'}</span>
+                </div>
+              </div>
             </div>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
